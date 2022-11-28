@@ -6,6 +6,7 @@ import com.hospital.review.domain.dto.UserJoinRequest;
 import com.hospital.review.domain.dto.UserJoinResponse;
 import com.hospital.review.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,8 +22,8 @@ public class UserApiController {
     private final UserService userService;
 
     @PostMapping("/join")
-    public Response<UserJoinResponse> join(@RequestBody UserJoinRequest userJoinRequest) {
-        UserDto userDto = userService.join(userJoinRequest);
-        return Response.success(new UserJoinResponse());
+    public Response<UserJoinResponse> join(@RequestBody UserJoinRequest request) {
+        UserDto userDto = userService.join(request);
+        return Response.success(new UserJoinResponse(userDto.getUsername(), userDto.getEmail()));
     }
 }
