@@ -1,15 +1,14 @@
 package com.hospital.review.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Generated;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Entity
 @Table(name = "users")
 public class User {
 
