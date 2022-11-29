@@ -8,6 +8,7 @@ import com.hospital.review.exception.HospitalReviewException;
 import com.hospital.review.repository.UserRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -17,6 +18,7 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder encoder;
 
     public UserDto join(UserJoinRequest request) {
         // 유저네임 중복체크
@@ -29,7 +31,7 @@ public class UserService {
 
 
         // 회원가입
-        User savedUser = userRepository.save(request.toEntity());
+        User savedUser = userRepository.save(request.toEntity(encoder.encode(request.getPassword())));
         return UserDto.builder()
                 .id(savedUser.getId())
                 .username(savedUser.getUsername())
