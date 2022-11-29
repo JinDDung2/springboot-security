@@ -1,11 +1,9 @@
 package com.hospital.review.domain.dto;
 
 import com.hospital.review.domain.User;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
