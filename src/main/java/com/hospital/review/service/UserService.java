@@ -31,8 +31,6 @@ public class UserService {
                     throw new HospitalReviewException(ErrorCode.DUPLICATED_USER_NAME, String.format("username:%s", request.getUsername()));
                 });
 
-
-
         // 회원가입
         User savedUser = userRepository.save(request.toEntity(encoder.encode(request.getPassword())));
         return UserDto.builder()
@@ -54,5 +52,12 @@ public class UserService {
 
         // 두가지 확인 중 에러 없다면 토큰 발행
         return JwtTokenUtil.createToken(username, secretKey, expireTimeMs);
+    }
+
+    public User findByUsername(String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> {
+            throw new HospitalReviewException(ErrorCode.NOT_FOUND, "해당 유저가 없습니다.");
+        });
+        return user;
     }
 }
