@@ -1,5 +1,6 @@
 package com.hospital.review.configuration;
 
+import com.hospital.review.domain.User;
 import com.hospital.review.service.UserService;
 import com.hospital.review.utils.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
@@ -55,9 +56,19 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             return;
         }
 
-       // 권한확인 작업에 따른 허락
+        // 권한확인 작업에 따른 허락
+
+        // 토큰에서 claim 꺼내고 claim 에서 username 꺼내기
+        String username = JwtTokenUtil.getUsername(token, secretKey);
+        log.info("username={}", username);
+
+        // userDetails
+        User user = userService.findByUsername(username);
+        log.info("userRole={}", user.getUserRole());
+
+        // 권한확인 작업에 따른 허락
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                "", null, List.of(new SimpleGrantedAuthority("USER")));
+                user.getUsername(), null, List.of(new SimpleGrantedAuthority(user.getUserRole().name())));
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authenticationToken); // 권한 부여
         filterChain.doFilter(request, response);

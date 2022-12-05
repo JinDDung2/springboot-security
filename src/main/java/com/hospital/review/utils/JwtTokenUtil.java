@@ -24,9 +24,13 @@ public class JwtTokenUtil {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
     }
 
-    public static boolean isExpired(String token, String secretKey) {
-        java.util.Date expiredDate = extractClaims(token, secretKey).getExpiration();
+    public static boolean isExpired(String token, String key) {
+        java.util.Date expiredDate = extractClaims(token, key).getExpiration();
         return expiredDate.before(new Date());
+    }
+
+    public static String getUsername(String token, String secretKey) {
+        return extractClaims(token, secretKey).get("username", String.class);
     }
 
 }
